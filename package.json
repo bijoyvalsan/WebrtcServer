@@ -4,9 +4,9 @@
   "description": "node server for to listen sockets webrtc",
   "main": "server.js",
   "scripts": {
-    "heroku-postbuild": "npm run build",
-    "start": "node server.js",
-    "build": "node server.js"
+    
+    "start": "node server.js"
+   
   },
   "dependencies": {
     "uuid": "^3.0.1",
