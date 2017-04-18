@@ -1,19 +1,20 @@
-// you have to replace this portnumber with the requested
-// port as described before
-var webSocketsServerPort = 63949,
-// this tells node what we need for this application
-webSocketServer = require('websocket').server,
-http = require('http'),
-// get a random number generator
-uuid = require('uuid'),
-// here we will save all clients who
-// are currently connected to the websocket server
-rooms= {};
 
-// Because Websockets are using an upgraded
-// HTTP header we need to create an HTTP server
-var server = http.createServer(function(request, response) {
-});
+var express=require('express');
+var webSocketsServerPort = 63949;
+var uuid = require('uuid');
+var rooms= {};
+const path = require('path');
+const INDEX = path.join(__dirname, 'index.html');
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX) )
+  .listen(webSocketsServerPort, () => console.log(`Listening on ${ webSocketsServerPort }`));
+
+
+// this tells node what we need for this application
+var webSocketServer = require('websocket').server
+
+
 
 // now we tell the HTTP server to listen on our port
 server.listen(webSocketsServerPort, function() {
