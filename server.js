@@ -1,6 +1,6 @@
 
 var express=require('express');
-var webSocketsServerPort = 63949;
+var webSocketsServerPort = 3000;
 var uuid = require('uuid');
 var rooms= {};
 const path = require('path');
