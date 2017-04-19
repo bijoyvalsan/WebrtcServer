@@ -1,110 +1,72 @@
+var express = require('express');
+var app = express();
+var fs = require('fs');
+var open = require('open');
+// var options = {
+//   key: fs.readFileSync('./fake-keys/privatekey.pem'),
+//   cert: fs.readFileSync('./fake-keys/certificate.pem')
+// };
+var serverPort = (process.env.PORT  || 4443);
+var https = require('https');
+var http = require('http');
+var server;
+// if (process.env.LOCAL) {
+//   server = https.createServer(options, app);
+// } else {
+  server = http.createServer(app);
+//}
+var io = require('socket.io')(server);
 
-var express=require('express');
-var webSocketsServerPort = 3000;
-var uuid = require('uuid');
-var rooms= {};
-const path = require('path');
-const INDEX = path.join(__dirname, 'index.html');
+var roomList = {};
 
-const server = express()
-  .use((req, res) => res.sendFile(INDEX) )
-  .listen(webSocketsServerPort, () => console.log(`Listening on ${ webSocketsServerPort }`));
-
-
-// this tells node what we need for this application
-var webSocketServer = require('websocket').server
-
-
-
-// now we tell the HTTP server to listen on our port
-server.listen(webSocketsServerPort, function() {
-	console.log((new Date()) + " Server is listening on port " + webSocketsServerPort);
+app.get('/', function(req, res){
+  console.log('get /');
+  res.sendFile(__dirname + '/index.html');
+});
+server.listen(serverPort, function(){
+  console.log('server up and running at %s port', serverPort);
+  if (process.env.LOCAL) {
+    open('http://localhost:' + serverPort)
+  }
 });
 
-// here we create the websocket server
-var wsServer = new webSocketServer({
-	httpServer: server
-});
+function socketIdsInRoom(name) {
+  var socketIds = io.nsps['/'].adapter.rooms[name];
+  if (socketIds) {
+    var collection = [];
+    for (var key in socketIds) {
+      collection.push(key);
+    }
+    return collection;
+  } else {
+    return [];
+  }
+}
 
-// this is executed each time the websocket
-// server receives an request
-wsServer.on('request', function(request) {
+io.on('connection', function(socket){
+  console.log('connection');
+  socket.on('disconnect', function(){
+    console.log('disconnect');
+    if (socket.room) {
+      var room = socket.room;
+      io.to(room).emit('leave', socket.id);
+      socket.leave(room);
+    }
+  });
 
-	// allow all incoming connections
-	var connection = request.accept(null, request.origin);
+  socket.on('join', function(name, callback){
+    console.log('join', name);
+    var socketIds = socketIdsInRoom(name);
+    callback(socketIds);
+    socket.join(name);
+    socket.room = name;
+  });
 
-	// here we read the incoming messages and try to parse them to JSON
-	connection.on('message', function(message) {
-		console.log('Incoming Message from '+request.origin);
-		// try to parse JSON
-		try {
-			var data = JSON.parse(message.utf8Data);
-		}
-		catch(e) {
-			console.log('This does not look like valid JSON');
-		}
 
-		// if JSON is valid process the request
-		if(data !== undefined && data.type !== undefined) {
-			switch(data.type) {
-				case 'createRoom':
-					// generate roomId and store current connection
-					var roomId = uuid.v1();
-					rooms[roomId] = {
-						creatorConnection: connection,
-						partnerConnection: false,
-					}
-					// send token to user
-					var data = {
-						type: 'roomCreated',
-						payload: roomId
-					};
-					return send(rooms[roomId].creatorConnection, data);
-				break;
-				case 'offer':
-					if(rooms[data.roomId].partnerConnection) {
-						// send error to user
-						var data = {
-							type: 'error',
-							payload: 'room is already full'
-						};
-						return send(connection, data);
-					}
-					console.log('offer sended');
-					rooms[data.roomId].partnerConnection = this;
-
-					return send(rooms[data.roomId].creatorConnection, data);
-				break;
-				// send to other guy
-				default:
-					if(this === rooms[data.roomId].partnerConnection) {
-						console.log('send to creator : '+data.type);
-						return send(rooms[data.roomId].creatorConnection, data);
-					}
-					console.log('send to parther : '+data.type);
-					return send(rooms[data.roomId].partnerConnection, data);
-				break;
-			}
-		}
-		// if JSON is invalid or type is missing send error
-		else {
-			var data = {
-				type: 'error',
-				payload: 'ERROR FROM SERVER: Incorrect data or no data received'
-			};
-			send(connection,data);
-		}
-	});
-
-	// this function sends data to the other user
-	var send = function(connection, data){
-		try {
-			connection.sendUTF(JSON.stringify(data));
-		}
-		catch(e) {
-			console.log('\n\n!!!### ERROR while sending message ###!!!\n');
-			console.log(e+'\n');
-			return;
-		}
-	};
+  socket.on('exchange', function(data){
+    console.log('exchange', data);
+    data.from = socket.id;
+    var to = io.sockets.connected[data.to];
+    to.emit('exchange', data);
+  });
 });
