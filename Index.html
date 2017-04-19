@@ -180,14 +180,9 @@ function logError(error) {
 }
 
 function press() {
-  var roomID = "JJCTS";
-  if (roomID == "") {
-    alert('Please enter room ID');
-  } else {
-    var roomIDContainer = document.getElementById('roomIDContainer');
-    roomIDContainer.parentElement.removeChild(roomIDContainer);
+  var roomID = "JJCTS";  
     join(roomID);
-  }
+  
 }
 function textRoomPress() {
   var text = document.getElementById('textRoomInput').value;
