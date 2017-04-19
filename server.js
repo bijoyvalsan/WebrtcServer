@@ -12,8 +12,8 @@ const server = express()
 
 var io = require('socket.io')(server);
 
-io.set('transports', ['xhr-polling']);
-io.set('polling duration', 10);
+//io.set('transports', ['xhr-polling']);
+//io.set('polling duration', 10);
 
 var roomList = {};
 
