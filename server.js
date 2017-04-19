@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var fs = require('fs');
-var open = require('open');
+
 // var options = {
 //   key: fs.readFileSync('./fake-keys/privatekey.pem'),
 //   cert: fs.readFileSync('./fake-keys/certificate.pem')
@@ -25,7 +25,6 @@ app.get('/index', function(req, res){
 });
 server.listen(serverPort, function(){
   console.log('server up and running at %s port', serverPort); 
-    open('http://localhost:' + serverPort) 
 });
 
 function socketIdsInRoom(name) {
