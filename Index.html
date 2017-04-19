@@ -17,6 +17,7 @@
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
+var isSupported=true;
 var socket = io()
 
 var RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || window.msRTCPeerConnection;
@@ -36,7 +37,7 @@ function getLocalStream() {
     localStream = stream;
     selfView.src = URL.createObjectURL(stream);
     selfView.muted = true;
-  }, logError);
+  }, logErroronLocal);
 }
 
 function join(roomID) {
@@ -179,8 +180,15 @@ function logError(error) {
   console.log("logError", error);
 }
 
+function logErroronLocal(error) {
+  console.log("logError", error);
+  isSupported=false;
+
+}
+
 function press() {
-  var roomID = "JJCTS";  
+  var roomID = "JJCTS"; 
+  if(isSupported) 
     join(roomID);
   
 }
