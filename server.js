@@ -3,7 +3,7 @@ var app = express();
 var fs = require('fs');
 
 
-var serverPort = 3000;
+var serverPort = (process.env.PORT || 3000);
 
 const server = express()
   .use((req, res) => res.sendFile(__dirname + '/Index.html') )
