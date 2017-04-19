@@ -4,14 +4,14 @@
   "description": "node server for to listen sockets webrtc",
   "main": "server.js",
   "scripts": {
-     "open": "heroku open",
-    "logs": "heroku logs --tail",
-    "deploy": "git push heroku master",
     "start": "node server.js"
   },
+  "engines": {
+    "node": "6.9.2"
+  },
   "dependencies": {
-    "express": "4.15.2",
-    "socket.io": "1.7.2"
+    "express": "4.14.1",
+    "socket.io": "1.3.4"
   },
   "author": "bijoy",
   "license": "ISC"

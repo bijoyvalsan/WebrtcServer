@@ -6,8 +6,8 @@ var fs = require('fs');
 var serverPort = (process.env.PORT || 3000);
 
 const server = express()
-  .use((req, res) => res.sendFile(__dirname + '/Index.html') )
-  .listen(serverPort, () => console.log('Listening on '+ serverPort));
+  .use((req, res) => res.sendFile(__dirname + '/Index.html'))
+  .listen(serverPort, () => console.log('Listening on ' + serverPort));
 
 
 var io = require('socket.io')(server);
@@ -30,18 +30,21 @@ function socketIdsInRoom(name) {
   }
 }
 
-io.on('connection', function(socket){
+io.on('connection', function (socket) {
   console.log('connection');
-  socket.on('disconnect', function(){
+  socket.on('disconnect', function () {
     console.log('disconnect');
     if (socket.room) {
       var room = socket.room;
-      io.to(room).emit('leave', socket.id);
-      socket.leave(room);
+      setInterval(() => {
+        io.to(room).emit('leave', socket.id);
+        socket.leave(room);
+      }, 1000);
+
     }
   });
 
-  socket.on('join', function(name, callback){
+  socket.on('join', function (name, callback) {
     console.log('join', name);
     var socketIds = socketIdsInRoom(name);
     callback(socketIds);
@@ -50,10 +53,12 @@ io.on('connection', function(socket){
   });
 
 
-  socket.on('exchange', function(data){
+  socket.on('exchange', function (data) {
     console.log('exchange', data);
     data.from = socket.id;
     var to = io.sockets.connected[data.to];
-    to.emit('exchange', data);
+    setInterval(() => to.emit('exchange', data), 1000);
   });
 });
+
+
