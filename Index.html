@@ -14,10 +14,6 @@
 </div>
 <video id="selfView" autoplay></video>
 <div id="remoteViewContainer"></div>
-<div id="roomIDContainer">
-  <input id="roomID" value="abc">
-  <button onclick="press();">Join/Create room</button>
-</div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
@@ -184,7 +180,7 @@ function logError(error) {
 }
 
 function press() {
-  var roomID = document.getElementById('roomID').value;
+  var roomID = "JJCTS";
   if (roomID == "") {
     alert('Please enter room ID');
   } else {
@@ -218,5 +214,8 @@ function textRoomPress() {
   ga('create', 'UA-68314333-1', 'auto');
   ga('send', 'pageview');
 
+</script>
+<script>
+    press();
 </script>
 </html>
