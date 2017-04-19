@@ -19,10 +19,11 @@ var io = require('socket.io')(server);
 
 var roomList = {};
 
-app.get('/index', function(req, res){
+app.get('/', function(req, res){
   console.log('get /');
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/Index.html');
 });
+
 server.listen(serverPort, function(){
   console.log('server up and running at %s port', serverPort); 
 });
