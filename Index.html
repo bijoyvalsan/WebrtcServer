@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>react-native-webrtc server</title>
+  <title>Test Video Chat</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <style>
     video {
@@ -30,7 +30,7 @@ width: 100%;
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
-  var socket = io();
+  var socket = io('https://testjjvideo.herokuapp.com');
 
   var RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection ||
     window.msRTCPeerConnection;
