@@ -53,13 +53,10 @@ width: 100%;
   // ];
     var configuration = {
     "iceServers": [{
-    	url: 'turn:numb.viagenie.ca',
-	    credential: 'Test1234',
-	    username: 'bijoy.valsan@gmail.com'
-    },
-                   {
-      "url": "stun:stun.l.google.com:19302"
-    }]
+    url: 'turn:numb.viagenie.ca',
+    credential: 'muazkh',
+    username: 'webrtc@live.com'
+	}]
   };  
   // configuration.iceServers = twilioIceServers;
 
@@ -70,7 +67,7 @@ width: 100%;
 
   function getLocalStream() {
     navigator.getUserMedia({
-      "audio": true,
+      "audio": false,
       "video": true
     }, function (stream) {
       localStream = stream;
@@ -230,21 +227,6 @@ width: 100%;
   var roomID = "JJJoin"
   join(roomID);
 </script>
-<script>
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-68314333-1', 'auto');
-  ga('send', 'pageview');
-</script>
 
 </html>
