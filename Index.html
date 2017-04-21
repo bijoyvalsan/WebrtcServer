@@ -18,6 +18,15 @@
             padding: 5px;
         }
     </style>
+
+</head>
+<body>   
+    <video id="selfView" autoplay></video>
+    <div id="remoteViewContainer"></div>
+    <div id="roomIDContainer">
+        <input id="roomID" value="abc">
+        <button onclick="press();">Join/Create room after video loaded</button>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         var socket = io();
@@ -38,7 +47,7 @@
         var remoteViewContainer = document.getElementById("remoteViewContainer");
         var localStream;
         function getLocalStream() {
-            navigator.getUserMedia({ "audio": false, "video": true }, function (stream) {
+            navigator.getUserMedia({ "audio": true, "video": true }, function (stream) {
                 localStream = stream;
                 selfView.src = URL.createObjectURL(stream);
                 selfView.muted = true;
@@ -105,13 +114,11 @@
                 };
                 dataChannel.onmessage = function (event) {
                     console.log("dataChannel.onmessage:", event.data);
-                    var content = document.getElementById('textRoomContent');
-                    content.innerHTML = content.innerHTML + '<p>' + socketId + ': ' + event.data + '</p>';
+                   
                 };
                 dataChannel.onopen = function () {
                     console.log('dataChannel.onopen');
-                    var textRoom = document.getElementById('textRoom');
-                    textRoom.style.display = "block";
+                 
                 };
                 dataChannel.onclose = function () {
                     console.log("dataChannel.onclose");
@@ -176,38 +183,9 @@
                 join(roomID);
             }
         }
-        function textRoomPress() {
-            var text = document.getElementById('textRoomInput').value;
-            if (text == "") {
-                alert('Enter something');
-            } else {
-                document.getElementById('textRoomInput').value = '';
-                var content = document.getElementById('textRoomContent');
-                content.innerHTML = content.innerHTML + '<p>' + 'Me' + ': ' + text + '</p>';
-                for (var key in pcPeers) {
-                    var pc = pcPeers[key];
-                    pc.textDataChannel.send(text);
-                }
-            }
-        }
+       
     </script>
-</head>
-<body>
-    <div style="display: none;">
-        <div id="textRoom" style="display: none;">
-            <div id="textRoomContent">
-                <h3>Text Room</h3>
-            </div>
-            <input id="textRoomInput">
-            <button onclick="textRoomPress();">Send</button>
-        </div>
-    </div>
-    <video id="selfView" autoplay></video>
-    <div id="remoteViewContainer"></div>
-    <div id="roomIDContainer">
-        <input id="roomID" value="abc">
-        <button onclick="press();">Join/Create room after video loaded</button>
-    </div>
+
 </body>
 
 </html>
