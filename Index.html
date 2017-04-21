@@ -19,16 +19,15 @@
             padding: 5px;
         }
     </style>   
+     <script src="/socket.io/socket.io.js"></script>
+    <script src="Webrtc.js"></script>  
 </head>
-<body onload="initializa()">
+<body onload="initialize()">
     <video id="selfView" autoplay></video>
     <div id="remoteViewContainer"></div>
     <div id="roomIDContainer">
         <input id="roomID" value="">
         <button onclick="press();">Join/Create room after video loaded</button>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="Webrtc.js"></script>  
+    </div>   
 </body>
-
 </html>
