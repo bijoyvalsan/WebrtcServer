@@ -15,7 +15,7 @@ var remoteViewContainer = null;
 var localStream;
 
 
-function initializa() {
+function initialize() {
     socket = io();
     selfView = document.getElementById("selfView");
     remoteViewContainer = document.getElementById("remoteViewContainer");
