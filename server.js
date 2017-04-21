@@ -2,14 +2,14 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 
-
+app.use(express.static(__dirname + '/static'));
 var serverPort = (process.env.PORT || 3000);
 
 const server = express()
   .use((req, res) => res.sendFile(__dirname + '/Index.html'))
   .listen(serverPort, () => console.log('Listening on ' + serverPort));
 
-server.use(express.static(__dirname + '/static'));
+
 var io = require('socket.io')(server);
 
 //io.set('transports', ['xhr-polling']);
