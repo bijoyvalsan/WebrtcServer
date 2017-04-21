@@ -3,8 +3,7 @@ var fs = require('fs');
 var serverPort = (process.env.PORT || 3000);
 
 const server = express()
-  .use(express.static(__dirname + '/static'))
-  .use((req, res) => res.sendFile(__dirname + '/Index.html'))
+  .use(express.static(__dirname + '/static')) 
   .listen(serverPort, () => console.log('Listening on ' + serverPort));
 
 
